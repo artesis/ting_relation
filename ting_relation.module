@@ -78,7 +78,9 @@ function ting_relation_form_ting_admin_ting_settings_alter(&$form, &$form_state)
 function ting_relation_ding_entity_buttons($type, $entity) {
   if ($entity instanceof TingEntity) {
     $relation = NULL;
-    $markup = '';
+    $markup_url = NULL;
+    $use_absolute = FALSE;
+
     // Seek for a online version of related material.
     foreach ($entity->relations as $rel) {
       if ($rel->type == 'dbcaddi:hasOnlineAccess') {
@@ -91,7 +93,6 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $ebrary_url = variable_get('ting_ebrary_url');
 
       $url = '';
-      $use_absolute = FALSE;
       if (strstr($relation->uri, '[URL]http')) {
         $url = str_replace('[URL]', '', htmlspecialchars_decode($relation->uri));
         $use_absolute = TRUE;
@@ -107,23 +108,37 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $url = $altered_url[0];
 
       if (!empty($url)) {
-        $markup = l(t('See online'), urldecode($url), array('attributes' => array('target' => '_blank'), 'absolute' => $use_absolute));
+        $markup_url = urldecode($url);
+        $markup_text = t('See online');
       }
     }
 
-    if (!$markup && $entity->online_url) {
+    if (!$markup_url && $entity->online_url) {
       $settings = variable_get('ting_url_labels', _ting_default_url_labels());
       $type = drupal_strtolower($entity->type);
       $label = !empty($settings[$type]) ? $settings[$type] : $settings['_default'];
-      $markup = l(t($label), $entity->online_url, array('attributes' => array('target' => '_new')));
+
+      $markup_text = t($label);
+      $markup_url = $entity->online_url;
+      $use_absolute = TRUE;
     }
 
     return array(
       array(
-        '#prefix' => '<p class="ding-entity-button">',
-        '#suffix' => '</p>',
-        '#type' => 'markup',
-        '#markup' => $markup,
+        '#theme' => 'link',
+        '#text' => '<i class="icon-white icon-globe"></i>&nbsp;' . $markup_text,
+        '#path' => $markup_url,
+        '#options' => array(
+          'attributes' => array(
+            'class' => array(
+              'btn',
+              'btn-artesis-turquoise',
+            ),
+            'target' => '_blank',
+          ),
+          'html' => TRUE,
+          'absolute' => $use_absolute,
+        ),
       ),
     );
   }
