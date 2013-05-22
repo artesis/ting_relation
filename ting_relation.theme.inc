@@ -31,6 +31,15 @@ function template_preprocess_ting_relation(&$variables) {
       default:
         break;
     }
+
+    // Pass the ID of relation to view.
+    foreach ($all_relations as $ns => $relations) {
+      foreach ($relations as $k => $relation) {
+        // ObjectID + RelationID.
+        $id = str_ireplace(':', '-', $variables['elements']['#object']->id . '_' . $relation['#object']->id);
+        $variables['content'][$ns][$k]['id'] = $id;
+      }
+    }
   }
 }
 

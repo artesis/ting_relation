@@ -128,3 +128,19 @@ function ting_relation_ding_entity_buttons($type, $entity) {
     );
   }
 }
+
+/**
+ * Implements hook_field_group_pre_render.
+ */
+function ting_relation_field_group_pre_render(&$element, $group, &$form) {
+  foreach($element as $elem) {
+    $id = $group->group_name . '_' . str_ireplace(':', '-', $elem['#object']->id);
+    break;
+  }
+
+  if ($group->format_type == 'fieldset') {
+    $add['#prefix'] = '<div id="' . $id . '" class="field-group-format ' . $group->group_name . ' ' . $classes . ' toggle">';
+    $add['#suffix'] = '</div>';
+    $element += $add;
+  }
+}
