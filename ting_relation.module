@@ -173,7 +173,7 @@ function ting_relation_field_group_pre_render(&$element, $group, &$form) {
   }
 
   if ($group->format_type == 'fieldset') {
-    $add['#prefix'] = '<div id="' . $id . '" class="field-group-format ' . $group->group_name . ' ' . $classes . ' toggle">';
+    $add['#prefix'] = '<div id="' . $id . '" class="field-group-format ' . $group->group_name . ' toggle">';
     $add['#suffix'] = '</div>';
     $element += $add;
   }

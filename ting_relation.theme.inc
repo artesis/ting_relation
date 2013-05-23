@@ -44,10 +44,10 @@ function template_preprocess_ting_relation(&$variables) {
     }
 
     // Pass the ID of relation to view.
-    foreach ($all_relations as $ns => $relations) {
+    foreach ($variables['content'] as $ns => $relations) {
       foreach ($relations as $k => $relation) {
         // ObjectID + RelationID.
-        $id = str_ireplace(':', '-', $variables['elements']['#object']->id . '_' . $relation['#object']->id);
+        $id = drupal_html_id($variables['elements']['#object']->getId() . '-' . substr(md5($relation['type'] . $k), 0, 6));
         $variables['content'][$ns][$k]['id'] = $id;
       }
     }
