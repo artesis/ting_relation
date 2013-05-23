@@ -51,10 +51,15 @@ function template_preprocess_ting_relation(&$variables) {
 function ting_relation_online($relations) {
   $ret = array();
   foreach ($relations as $relation) {
-    if ($relation['#ac_source'] == 'Ebrary') {
+    // TODO Check [type] => dbcaddi:hasOnlineAccess, [uri] => [useraccessinfomedia]?action= ...
+    if (!is_object($relation->object)) {
+      continue;
+    }
+    $ac_source = $relation->object->getAcSource();
+    if ($ac_source == 'Ebrary') {
       $ret[] = ting_relation_online_ebrary($relation);
     }
-    elseif ($relation['#ac_source'] == 'Filmstriben (fjernlå)') {
+    elseif ($ac_source == 'Filmstriben (fjernlå)') {
       $ret[] = ting_relation_online_filmstriben($relation);
     }
   }
@@ -118,6 +123,9 @@ function ting_relation_creator_description($relations) {
 }
 
 function ting_relation_ispartofmanifestation($relations) {
+  // TODO Show this objects properly.
+  return array();
+
   $ret = array();
   foreach ($relations as $relation) {
     $content = array();
