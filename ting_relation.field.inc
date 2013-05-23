@@ -62,15 +62,21 @@ function ting_relation_field_formatter_info() {
 function ting_relation_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $relation_array = array();
   $relation_types = ting_relation_inline();
-  foreach ($entity->relations as $relation) {
+  foreach ($entity->getRelations() as $relation) {
     if (isset($relation_types[$relation->type])) {
-      $ownerId = is_object($relation->object) ? $relation->object->ownerId : NULL;
-      if ($relation->type == 'isPartOfManifestation' && variable_get('ting_agency', -1) != $ownerId) {
+      $object = $relation->object;
+      $owner_id = NULL;
+      if (is_object($object)) {
+        $owner_id = $object->getOwnerId();
+      }
+
+      if ($relation->type == 'isPartOfManifestation' && variable_get('ting_agency', -1) != $owner_id) {
         continue;
       }
+
       $relation_array[$relation->type][] = array(
         '#theme' => 'ting_relation',
-        '#ac_source' => $entity->ac_source,
+        '#ac_source' => $entity->getAcSource(),
         '#relation' => $relation,
         '#object' => $relation->object,
         '#title' => $relation_types[$relation->type],
