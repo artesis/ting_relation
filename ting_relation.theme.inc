@@ -123,15 +123,13 @@ function ting_relation_creator_description($relations) {
 }
 
 function ting_relation_ispartofmanifestation($relations) {
-  // TODO Show this objects properly.
-  return array();
 
   $ret = array();
   foreach ($relations as $relation) {
     $content = array();
     $content['type'] = _ting_relation_title($relation->type);
     $related_object = $relation->object;
-    $rendered_item = ting_object_view($related_object, 'teaser');
+    $rendered_item = ting_object_view($related_object, 'collection_objects');
     $content['text'] = render($rendered_item);
     $ret[] = $content;
   }
