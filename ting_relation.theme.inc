@@ -172,7 +172,11 @@ function ting_relation_subjects($relations) {
 function ting_relation_reviews($relations) {
   $ret = NULL;
   foreach ($relations as $relation) {
-    $ac_source = $relation->object->getAcSource();
+    $ac_source = NULL;
+    if (is_object($relation->object)) {
+      $ac_source = $relation->object->getAcSource();
+    }
+
     if ($ac_source == 'Anmeldelser') {
       $ret[] = ting_relation_review_other($relation);
     }
