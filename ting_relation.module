@@ -95,7 +95,6 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $ebrary_url = variable_get('ting_ebrary_url');
 
       $url = '';
-      $use_absolute = FALSE;
       if (strstr($relation->uri, '[URL]http')) {
         $url = str_replace('[URL]', '', htmlspecialchars_decode($relation->uri));
         $use_absolute = TRUE;
@@ -111,7 +110,8 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $url = $altered_url[0];
 
       if (!empty($url)) {
-        $markup = l(t('See online'), urldecode($url), array('attributes' => array('target' => '_blank'), 'absolute' => $use_absolute));
+        $markup_url = urldecode($url);
+        $markup_text = t('See online');
       }
     }
 
@@ -147,6 +147,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
     }
   }
 }
+
 /**
  * Get relation title by type.
  *
