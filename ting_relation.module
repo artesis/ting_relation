@@ -125,7 +125,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $use_absolute = TRUE;
     }
 
-    // Make sure the url is nnot array.
+    // Make sure the url is not array.
     if (is_array($markup_url)) {
       $markup_url = $markup_url[0];
     }
