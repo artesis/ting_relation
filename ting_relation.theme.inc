@@ -60,7 +60,6 @@ function template_preprocess_ting_relation(&$variables) {
 function ting_relation_online($relations) {
   $ret = array();
   foreach ($relations as $relation) {
-    // TODO Check [type] => dbcaddi:hasOnlineAccess, [uri] => [useraccessinfomedia]?action= ...
     if (!is_object($relation->object)) {
       continue;
     }
@@ -208,10 +207,11 @@ function ting_relation_review_other($relation) {
 
   // Check if we should link to fulltext.
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/object/' . $ting->ding_entity_id . '/fulltext');
+    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
   else{
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/object/' . $ting->ding_entity_id);
+    // No link for simple objects.
+    $content['title'] = $ting->getTitle();
   }
   // Creators.
   $names = ting_relation_array2names($ting->getCreators());
@@ -228,7 +228,13 @@ function ting_relation_review_other($relation) {
   // Online_url.
   $url = $ting->getOnlineUrl();
   if (!empty($url)) {
-    $content['online_url'] = array('#markup' => l($ting->getAcSource(), $url, array('attributes' => array('target' => '_blank'))));
+    $content['online_url'] = array(
+      '#markup' => l(
+        $ting->getAcSource(),
+        $url,
+        array('attributes' => array('target' => '_blank'))
+      ),
+    );
   }
 
   return $content;
@@ -239,7 +245,6 @@ function ting_relation_review_other($relation) {
  */
 function ting_relation_review($relation) {
   $ting = $relation->object;
-
   // Type title ; generel.
   $content['type'] = _ting_relation_title($relation->type);
 
@@ -247,10 +252,11 @@ function ting_relation_review($relation) {
   global $base_url;
   // Check if we should link to fulltext.
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIdentifier()) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/object/' . $ting->ding_entity_id . '/fulltext');
+    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
   else{
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/object/' . $ting->ding_entity_id);
+    // No link for simple objects.
+    $content['title'] = $ting->getTitle();
   }
   // Year.
   $content['year'] = $ting->getDate();
