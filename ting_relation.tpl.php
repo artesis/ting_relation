@@ -9,7 +9,7 @@ drupal_add_library('system', 'drupal.collapse');
 if (is_array($content)) {
   foreach ($content as $ns => $relations) {
     if (!empty($relations) && $ns != 'dbcaddi:hasOnlineAccess') { ?>
-    <div id="<?php echo $relations[0]['id']; ?>" class="<?php print $classes . ' ting-relation-' . drupal_html_class($ns) . ' clearfix'; ?>">
+    <div id="<?php echo $relations[0]['id']; ?>" class="<?php print $classes . ' field-group-format group_relations ting-relation-' . drupal_html_class($ns) . ' clearfix'; ?>">
       <fieldset class="field-group-fieldset group-relations collapsible collapsed">
       <legend>
         <span class="fieldset-legend"><?php print ucfirst($relations[0]['type']); ?></span>
