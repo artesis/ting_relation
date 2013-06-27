@@ -141,12 +141,14 @@ function ting_relation_ding_entity_buttons($type, $entity) {
               'class' => array(
                 'btn',
                 'btn-artesis-turquoise',
+                'see-online',
               ),
               'target' => '_blank',
             ),
             'html' => TRUE,
             'absolute' => $use_absolute,
           ),
+          '#weight' => 10,
         ),
       );
     }
