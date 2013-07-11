@@ -138,6 +138,10 @@ function ting_relation_ispartofmanifestation($relations) {
     $content['type'] = _ting_relation_title($relation->type);
     $related_object = $relation->object;
     $rendered_item = ting_object_view($related_object, 'collection_objects');
+
+    // Objects like this are not part of datawell, so they hasn't any buttons.
+    unset($rendered_item['ding_entity_buttons']);
+
     $content['text'] = render($rendered_item);
     $ret[] = $content;
   }
