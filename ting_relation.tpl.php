@@ -3,9 +3,6 @@
  * @file
  * Template to render ting_releation content.
  */
-drupal_add_library('system', 'drupal.form');
-drupal_add_library('system', 'drupal.collapse');
-
 if (is_array($content)) {
   foreach ($content as $ns => $relations) {
     if (!empty($relations) && $ns != 'dbcaddi:hasOnlineAccess') { ?>

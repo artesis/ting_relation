@@ -60,34 +60,28 @@ function ting_relation_field_formatter_info() {
  * Implements hook_field_formatter_view().
  */
 function ting_relation_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  $relation_array = array();
-  $relation_types = ting_relation_inline();
+  $relations_array = array();
+  $relations_types = ting_relation_inline();
+
   foreach ($entity->getRelations() as $relation) {
-    if (isset($relation_types[$relation->type])) {
+    if (isset($relations_types[$relation->type])) {
       $object = $relation->object;
-      $owner_id = NULL;
-      if (is_object($object)) {
-        $owner_id = $object->getOwnerId();
-      }
 
-      if ($relation->type == 'isPartOfManifestation' && variable_get('ting_agency', -1) != $owner_id) {
-        continue;
-      }
-
-      $relation_array[$relation->type][] = array(
-        '#theme' => 'ting_relation',
+      $relations_array[$relation->type][$object->getLocalId()] = array(
         '#ac_source' => $entity->getAcSource(),
         '#relation' => $relation,
         '#object' => $relation->object,
-        '#title' => $relation_types[$relation->type],
+        '#title' => $relation->type,
       );
     }
   }
+
   $element = array(
     '#theme' => 'ting_relation',
-    '#relations' => $relation_array,
+    '#relations' => $relations_array,
     '#attached' => array(
       'css' => array(drupal_get_path('module', 'ting_relation') . '/ting_relation.css'),
+      'library' => array('form', 'collapse'),
     ),
   );
 
