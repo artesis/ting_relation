@@ -209,14 +209,14 @@ function ting_relation_review_other($relation) {
   // Title.
   global $base_url;
 
-  // Check if we should link to fulltext.
+  // Convert title to an object link,
+  //   and check if we should link to fultext.
+  $item_link = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id);
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
+    $item_link .= '/fulltext';
   }
-  else{
-    // No link for simple objects.
-    $content['title'] = $ting->getTitle();
-  }
+  $content['title'] = $item_link;
+
   // Creators.
   $names = ting_relation_array2names($ting->getCreators());
   if (!empty($names)) {
@@ -254,25 +254,34 @@ function ting_relation_review($relation) {
 
   // Title ; generel.
   global $base_url;
-  // Check if we should link to fulltext.
-  if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIdentifier()) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
+
+  // Convert title to an object link,
+  //   and check if we should link to fultext.
+  $item_link = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id);
+  if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
+    $item_link .= '/fulltext';
   }
-  else{
-    // No link for simple objects.
-    $content['title'] = $ting->getTitle();
-  }
+  $content['title'] = $item_link;
+
   // Year.
   $content['year'] = $ting->getDate();
+
   // Creator.
   $content['creator'] = ting_relation_array2names($ting->getCreators());
+
   // Text.
   $content['text'] = $ting->getDescription();
 
-
+  // Online_url.
   $url = $ting->getOnlineUrl();
   if (!empty($url)) {
-    $content['online_url'] = array('#markup' => l($ting->getAcSource(), $url, array('attributes' => array('target' => '_blank'))));
+    $content['online_url'] = array(
+      '#markup' => l(
+        $ting->getAcSource(),
+        $url,
+        array('attributes' => array('target' => '_blank'))
+      )
+    );
   }
 
   return $content;
