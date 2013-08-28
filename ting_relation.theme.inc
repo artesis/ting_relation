@@ -203,6 +203,8 @@ function ting_relation_reviews($relations) {
 function ting_relation_review_other($relation) {
   $ting = $relation->object;
 
+  $url = $ting->getOnlineUrl();
+
   // Type title.
   $content['type'] = _ting_relation_title($relation->type);
 
@@ -211,11 +213,15 @@ function ting_relation_review_other($relation) {
 
   // Convert title to an object link,
   //   and check if we should link to fultext.
-  $item_link = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id);
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
-    $item_link .= '/fulltext';
+    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
-  $content['title'] = $item_link;
+  elseif (empty($url)) {
+    $content['title'] = l($ting->getTitle(), $base_url . '/search/ting/' . $ting->getLocalId());
+  }
+  else {
+    $content['title'] = $ting->getTitle();
+  }
 
   // Creators.
   $names = ting_relation_array2names($ting->getCreators());
@@ -230,7 +236,6 @@ function ting_relation_review_other($relation) {
   }
 
   // Online_url.
-  $url = $ting->getOnlineUrl();
   if (!empty($url)) {
     $content['online_url'] = array(
       '#markup' => l(
@@ -249,6 +254,9 @@ function ting_relation_review_other($relation) {
  */
 function ting_relation_review($relation) {
   $ting = $relation->object;
+
+  $url = $ting->getOnlineUrl();
+
   // Type title ; generel.
   $content['type'] = _ting_relation_title($relation->type);
 
@@ -257,11 +265,15 @@ function ting_relation_review($relation) {
 
   // Convert title to an object link,
   //   and check if we should link to fultext.
-  $item_link = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id);
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
-    $item_link .= '/fulltext';
+    $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
-  $content['title'] = $item_link;
+  elseif (empty($url)) {
+    $content['title'] = l($ting->getTitle(), $base_url . '/search/ting/' . $ting->getLocalId());
+  }
+  else {
+    $content['title'] = $ting->getTitle();
+  }
 
   // Year.
   $content['year'] = $ting->getDate();
@@ -273,7 +285,6 @@ function ting_relation_review($relation) {
   $content['text'] = $ting->getDescription();
 
   // Online_url.
-  $url = $ting->getOnlineUrl();
   if (!empty($url)) {
     $content['online_url'] = array(
       '#markup' => l(
