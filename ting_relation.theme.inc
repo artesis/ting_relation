@@ -11,16 +11,10 @@ function template_preprocess_ting_relation(&$variables) {
   $variables['content'] = array();
 
   // Get relations from object.
-  $relations = $variables['elements']['#object']->getRelations();
-
-  // Group relations by type.
-  $all_relations = array();
-  foreach ($relations as $rel) {
-    $all_relations[$rel->type][] = $rel;
-  }
+  $object_relations = $variables['elements']['#relations'];
 
   // Get data from each relation group.
-  foreach ($all_relations as $ns => $relations) {
+  foreach ($object_relations as $ns => $relations) {
     switch ($ns) {
       case 'dbcaddi:hasReview':
         $variables['content'][$ns] = ting_relation_reviews($relations);
@@ -60,10 +54,10 @@ function template_preprocess_ting_relation(&$variables) {
 function ting_relation_online($relations) {
   $ret = array();
   foreach ($relations as $relation) {
-    if (!is_object($relation->object)) {
+    if (!is_object($relation['#object'])) {
       continue;
     }
-    $ac_source = $relation->object->getAcSource();
+    $ac_source = isset($relation['#ac_source']) ? $relation['#ac_source'] : '';
     if ($ac_source == 'Ebrary') {
       $ret[] = ting_relation_online_ebrary($relation);
     }
@@ -107,9 +101,9 @@ function ting_relation_online_filmstriben($relation) {
 function ting_relation_creator_description($relations) {
   foreach ($relations as $relation) {
     $content = array();
-    $ting = $relation->object;
+    $ting = $relation['#object'];
 
-    $content['type'] = _ting_relation_title($relation->type);
+    $content['type'] = _ting_relation_title($relation['#title']);
     $content['title'] = $ting->getTitle();
 
     $creators = $ting->getCreators();
@@ -131,12 +125,11 @@ function ting_relation_creator_description($relations) {
 }
 
 function ting_relation_ispartofmanifestation($relations) {
-
   $ret = array();
   foreach ($relations as $relation) {
     $content = array();
-    $content['type'] = _ting_relation_title($relation->type);
-    $related_object = $relation->object;
+    $content['type'] = _ting_relation_title($relation['#title']);
+    $related_object = $relation['#object'];
     $rendered_item = ting_object_view($related_object, 'collection_objects');
 
     // Objects like this are not part of datawell, so they hasn't any buttons.
@@ -152,9 +145,9 @@ function ting_relation_ispartofmanifestation($relations) {
 function ting_relation_subjects($relations) {
   foreach ($relations as $relation) {
     $content = array();
-    $ting = $relation->object;
+    $ting = $relation['#object'];
 
-    $content['type'] = _ting_relation_title($relation->type);
+    $content['type'] = _ting_relation_title($relation['#title']);
     $content['title'] = $ting->getTitle();
 
     $creators = $ting->getCreators();
@@ -182,10 +175,7 @@ function ting_relation_subjects($relations) {
 function ting_relation_reviews($relations) {
   $ret = NULL;
   foreach ($relations as $relation) {
-    $ac_source = NULL;
-    if (is_object($relation->object)) {
-      $ac_source = $relation->object->getAcSource();
-    }
+    $ac_source = isset($relation['#ac_source']) ? $relation['#ac_source'] : '';
 
     if ($ac_source == 'Anmeldelser') {
       $ret[] = ting_relation_review_other($relation);
@@ -201,10 +191,10 @@ function ting_relation_reviews($relations) {
  * a variant of a review (ac:source = 'bibliotekets materialer'
  */
 function ting_relation_review_other($relation) {
-  $ting = $relation->object;
+  $ting = $relation['#object'];
 
   // Type title.
-  $content['type'] = _ting_relation_title($relation->type);
+  $content['type'] = _ting_relation_title($relation['#title']);
 
   // Title.
   global $base_url;
@@ -248,9 +238,9 @@ function ting_relation_review_other($relation) {
  * a variant of a review (ac:source = 'Anmeldelser'
  */
 function ting_relation_review($relation) {
-  $ting = $relation->object;
+  $ting = $relation['#object'];
   // Type title ; generel.
-  $content['type'] = _ting_relation_title($relation->type);
+  $content['type'] = _ting_relation_title($relation['#title']);
 
   // Title ; generel.
   global $base_url;
