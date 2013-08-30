@@ -255,7 +255,8 @@ function ting_relation_review($relation) {
 
   // Convert title to an object link,
   //   and check if we should link to fultext.
-  if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
+  $has_identifier = !$ting->getIssn() || !$ting->getIsbn();
+  if (in_array('docbook', $ting->getFormatsAvailable()) && !$has_identifier) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
   elseif (empty($url)) {
