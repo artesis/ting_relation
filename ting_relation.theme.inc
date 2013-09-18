@@ -273,7 +273,7 @@ function ting_relation_review($relation) {
   $content['creator'] = ting_relation_array2names($ting->getCreators());
 
   // Text.
-  $content['text'] = $ting->getDescription();
+  $content['text'] = $ting->getIsPartOf();
 
   // Online_url.
   if (!empty($url)) {
