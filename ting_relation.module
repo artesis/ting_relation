@@ -120,7 +120,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       $type = drupal_strtolower($entity->getType());
       $label = !empty($settings[$type]) ? $settings[$type] : $settings['_default'];
 
-      $markup_text = $label;
+      $markup_text = t($label);
       $markup_url = $entity->getOnlineUrl();
       $use_absolute = TRUE;
     }
