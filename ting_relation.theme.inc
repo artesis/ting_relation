@@ -260,7 +260,7 @@ function ting_relation_review($relation) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
   elseif (empty($url)) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/search/ting/' . $ting->getLocalId());
+    $content['title'] = l($ting->getTitle(), $base_url . '/search/ting/rec.id=' . $ting->getLocalId());
   }
   else {
     $content['title'] = $ting->getTitle();
