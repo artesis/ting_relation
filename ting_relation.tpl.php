@@ -6,10 +6,13 @@
 if (is_array($content)) {
   foreach ($content as $ns => $relations) {
     if (!empty($relations) && $ns != 'dbcaddi:hasOnlineAccess') { ?>
-    <a name="<?php echo $ns; ?>"></a>
-    <div class="<?php print $classes . ' ting-relation-' . drupal_html_class($ns) . ' clearfix'; ?>">
-      <h2><?php print $relations[0]['type']; ?></h2>
-      <?php foreach ($relations as $relation) { ?>
+    <div id="<?php echo $relations[0]['id']; ?>" class="<?php print $classes . ' field-group-format group_relations ting-relation-' . drupal_html_class($ns) . ' clearfix'; ?>">
+      <fieldset class="field-group-fieldset group-relations collapsible collapsed">
+      <legend>
+        <span class="fieldset-legend"><?php print ucfirst($relations[0]['type']); ?></span>
+      </legend>
+      <div class="fieldset-wrapper">
+      <?php foreach ($relations as $relation): ?>
         <div class="meta">
           <?php
           if (isset($relation['title'])) {
@@ -52,8 +55,8 @@ if (is_array($content)) {
         }
 
         print '<div class="clearfix"></div>';
-      }
-      print '</div>';
+      endforeach;
+      print '</div></fieldset></div>';
     }
   }
 }
