@@ -246,6 +246,10 @@ function ting_relation_review($relation) {
   $ting = $relation['#object'];
 
   $url = $ting->getOnlineUrl();
+  $rel = $ting->data->getRelations();
+  if ($rel[0]['type'] == "dbcaddi:hasOnlineAccess") {
+    $url = $rel[0]['uri'];
+  }
 
   // Type title ; generel.
   $content['type'] = _ting_relation_title($relation['#title']);
@@ -259,8 +263,11 @@ function ting_relation_review($relation) {
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$has_identifier) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
-  elseif (empty($url)) {
-    $content['title'] = l($ting->getTitle(), $base_url . '/search/ting/rec.id=' . $ting->getLocalId());
+  elseif (strstr($url, '[useraccessinfomedia]')) {
+    $content['title'] = l($ting->getTitle(), $base_url . '/ting/infomedia/' . $ting->getLocalId());
+  }
+  elseif (strstr($url, 'http://')) {
+    $content['title'] = l($ting->getTitle(), $url);
   }
   else {
     $content['title'] = $ting->getTitle();
