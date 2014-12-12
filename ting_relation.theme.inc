@@ -283,10 +283,19 @@ function ting_relation_review($relation) {
   $content['text'] = $ting->getIsPartOf();
 
   // Online_url.
-  if (!empty($url)) {
+  if (!empty($url) && !strstr($url, '[useraccessinfomedia]')) {
     $content['online_url'] = array(
       '#markup' => l(
-        $ting->getAcSource(),
+        $url,
+        $url,
+        array('attributes' => array('target' => '_blank'))
+      )
+    );
+  }
+  else {
+    $content['online_url'] = array(
+      '#markup' => l(
+        t('Go to Infomedia'),
         $url,
         array('attributes' => array('target' => '_blank'))
       )
