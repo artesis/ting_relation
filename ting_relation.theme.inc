@@ -283,23 +283,25 @@ function ting_relation_review($relation) {
   $content['text'] = $ting->getIsPartOf();
 
   // Online_url.
-  if (!empty($url) && !strstr($url, '[useraccessinfomedia]')) {
-    $content['online_url'] = array(
-      '#markup' => l(
-        $url,
-        $url,
-        array('attributes' => array('target' => '_blank'))
-      )
-    );
-  }
-  else {
-    $content['online_url'] = array(
-      '#markup' => l(
-        t('Go to Infomedia'),
-        $url,
-        array('attributes' => array('target' => '_blank'))
-      )
-    );
+  if (!empty($url)) {
+    if (!strstr($url, '[useraccessinfomedia]')) {
+      $content['online_url'] = array(
+        '#markup' => l(
+          $url,
+          $url,
+          array('attributes' => array('target' => '_blank'))
+        )
+      );
+    }
+    else {
+      $content['online_url'] = array(
+        '#markup' => l(
+          t('Go to Infomedia'),
+          $base_url . '/ting/infomedia/' . $ting->getLocalId(),
+          array('attributes' => array('target' => '_blank'))
+        )
+      );
+    }
   }
 
   return $content;
