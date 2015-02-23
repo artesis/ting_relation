@@ -31,7 +31,7 @@ function template_preprocess_ting_relation(&$variables) {
           $variables['content'][$ns] = $cont;
         }
         break;
-      case 'isPartOfManifestation':
+      case 'dbcbib:isPartOfManifestation':
         $variables['content'][$ns] = ting_relation_ispartofmanifestation($relations);
       default:
         break;
