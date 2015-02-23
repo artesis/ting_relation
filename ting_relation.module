@@ -46,7 +46,7 @@ function ting_relation_inline() {
       'dbcaddi:hasCreatorDescription' => t('Author portrait'),
       'dbcaddi:hasReview' => t('Review'),
       'dbcaddi:hasSubjectDescription' => t('Subject description'),
-      'isPartOfManifestation' => t('Is part of'),
+      'dbcbib:isPartOfManifestation' => t('Is part of'),
       'isReviewOf' => t('Is review of'),
       'hasOnlineAccess' => t('Article from Ebrary'),
     );
