@@ -29,7 +29,7 @@ function ting_relation_anchor_info() {
   // We need to know what kind of hasOnlineAccess
   // is provided with this object and return relevant anchor information.
   $object = menu_get_object('ting_object', 2);
-  if ($object->getAc_source() != 'Ebrary') {
+  if ($object->getAcSource() != 'Ebrary') {
     unset($relations['dbcaddi:hasOnlineAccess']);
   }
   unset($relations['dbcaddi:isReviewOf']);
@@ -46,9 +46,9 @@ function ting_relation_inline() {
       'dbcaddi:hasCreatorDescription' => t('Author portrait'),
       'dbcaddi:hasReview' => t('Review'),
       'dbcaddi:hasSubjectDescription' => t('Subject description'),
-      'isPartOfManifestation' => t('Is part of'),
-      'dbcaddi:isReviewOf' => t('Is review of'),
-      'dbcaddi:hasOnlineAccess' => t('Article from Ebrary'),
+      'dbcbib:isPartOfManifestation' => t('Is part of'),
+      'isReviewOf' => t('Is review of'),
+      'hasOnlineAccess' => t('Article from Ebrary'),
     );
   }
   return $types;
@@ -78,20 +78,23 @@ function ting_relation_form_ting_admin_ting_settings_alter(&$form, &$form_state)
 function ting_relation_ding_entity_buttons($type, $entity) {
   if ($entity instanceof TingEntity) {
     $relation = NULL;
-    $markup = '';
+    $markup_url = NULL;
+    $use_absolute = FALSE;
+    $markup_text = t('See online');
+
     // Seek for a online version of related material.
-    foreach ($entity->relations as $rel) {
+    foreach ($entity->getRelations() as $rel) {
       if ($rel->type == 'dbcaddi:hasOnlineAccess') {
         $relation = $rel;
         break;
       }
     }
+
     // Replace the online material link to related stuff if present.
     if ($relation) {
       $ebrary_url = variable_get('ting_ebrary_url');
 
       $url = '';
-      $use_absolute = FALSE;
       if (strstr($relation->uri, '[URL]http')) {
         $url = str_replace('[URL]', '', htmlspecialchars_decode($relation->uri));
         $use_absolute = TRUE;
@@ -100,31 +103,86 @@ function ting_relation_ding_entity_buttons($type, $entity) {
         $url = str_replace('[URL]', $ebrary_url, $relation->uri);
       }
       elseif (strstr($relation->uri, '[useraccessinfomedia]')) {
-        $url = 'ting/infomedia/' . $entity->localId;
+        $url = 'ting/infomedia/' . $entity->getLocalId();
       }
 
       $altered_url = module_invoke_all('ting_online_url_alter', $url);
       $url = $altered_url[0];
 
       if (!empty($url)) {
-        $markup = l(t('See online'), urldecode($url), array('attributes' => array('target' => '_blank'), 'absolute' => $use_absolute));
+        $markup_url = urldecode($url);
+        $markup_text = t('See online');
       }
     }
 
-    if (!$markup && $entity->online_url) {
+    if (!$markup_url && $entity->getOnlineUrl()) {
       $settings = variable_get('ting_url_labels', _ting_default_url_labels());
-      $type = drupal_strtolower($entity->type);
+      $type = drupal_strtolower($entity->getType());
       $label = !empty($settings[$type]) ? $settings[$type] : $settings['_default'];
-      $markup = l(t($label), $entity->online_url, array('attributes' => array('target' => '_new')));
+
+      $markup_text = t($label);
+      $markup_url = $entity->getOnlineUrl();
+      $use_absolute = TRUE;
     }
 
-    return array(
-      array(
-        '#prefix' => '<p class="ding-entity-button">',
-        '#suffix' => '</p>',
-        '#type' => 'markup',
-        '#markup' => $markup,
-      ),
-    );
+    // Make sure the url is not array.
+    if (is_array($markup_url)) {
+      $markup_url = $markup_url[0];
+    }
+
+    if (!empty($markup_url)) {
+      return array(
+        array(
+          '#theme' => 'link',
+          '#text' => '<i class="icon-white icon-globe"></i>&nbsp;' . $markup_text,
+          '#path' => $markup_url,
+          '#options' => array(
+            'attributes' => array(
+              'class' => array(
+                'btn',
+                'btn-artesis-turquoise',
+                'see-online',
+              ),
+              'target' => '_blank',
+            ),
+            'html' => TRUE,
+            'absolute' => $use_absolute,
+          ),
+          '#weight' => 10,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * Get relation title by type.
+ *
+ * @param string $type
+ *   Relation type.
+ * @return string
+ *   Relation title.
+ */
+function _ting_relation_title($type) {
+  $titles = ting_relation_inline();
+  if (!empty($titles[$type])) {
+    return $titles[$type];
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_field_group_pre_render.
+ */
+function ting_relation_field_group_pre_render(&$element, $group, &$form) {
+  foreach($element as $elem) {
+    $id = $group->group_name . '_' . str_ireplace(':', '-', $elem['#object']->id);
+    break;
+  }
+
+  if ($group->format_type == 'fieldset') {
+    $add['#prefix'] = '<div id="' . $id . '" class="field-group-format ' . $group->group_name . ' toggle">';
+    $add['#suffix'] = '</div>';
+    $element += $add;
   }
 }
