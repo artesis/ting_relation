@@ -103,7 +103,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
         $url = str_replace('[URL]', $ebrary_url, $relation->uri);
       }
       elseif (strstr($relation->uri, '[useraccessinfomedia]')) {
-        $url = 'ting/infomedia/' . $entity->getLocalId();
+        $url = 'ting/infomedia/nojs/' . $entity->getLocalId();
       }
 
       $altered_url = module_invoke_all('ting_online_url_alter', $url);
@@ -142,6 +142,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
                 'btn',
                 'btn-artesis-turquoise',
                 'see-online',
+                'use-ajax'
               ),
               'target' => '_blank',
             ),
