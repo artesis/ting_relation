@@ -90,10 +90,9 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       }
     }
 
+    $ebrary_url = variable_get('ting_ebrary_url', '');
     // Replace the online material link to related stuff if present.
     if ($relation) {
-      $ebrary_url = variable_get('ting_ebrary_url');
-
       $url = '';
       if (strstr($relation->uri, '[URL]http')) {
         $url = str_replace('[URL]', '', htmlspecialchars_decode($relation->uri));
@@ -122,13 +121,17 @@ function ting_relation_ding_entity_buttons($type, $entity) {
 
       $markup_text = t($label);
       $markup_url = $entity->getOnlineUrl();
+
+      // Make sure the url is not array.
+      if (is_array($markup_url)) {
+        $markup_url = reset($markup_url);
+      }
+
+      $markup_url = $ebrary_url . $markup_url;
       $use_absolute = TRUE;
     }
 
-    // Make sure the url is not array.
-    if (is_array($markup_url)) {
-      $markup_url = $markup_url[0];
-    }
+
 
     if (!empty($markup_url)) {
       return array(
