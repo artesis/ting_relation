@@ -124,7 +124,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
         $markup_url = reset($markup_url);
       }
 
-      preg_match('/ebrary.*id(?>=|\/)([^&\/]+)/', $markup_url, $matches);
+      preg_match('/ebrary.*id(?>=|\/)([^&\/]+)/i', $markup_url, $matches);
       if(isset($matches[1]) && !empty($matches[1])) {
         $markup_url = $ebrary_url . $matches[1];
       }
