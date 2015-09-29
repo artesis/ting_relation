@@ -109,8 +109,13 @@ function ting_relation_ding_entity_buttons($type, $entity) {
         $markup_url = 'ting/infomedia/ajax/' . $entity->getLocalId();
         $class[] =   'use-ajax';
       }
-
     }
+
+    if (!$markup_url && 'UC Viden' === $entity->getAcSource() && $relation) {
+      $markup_url = htmlspecialchars_decode($relation->uri);
+      $use_absolute = TRUE;
+    }
+
     if (!$markup_url && $entity->getOnlineUrl()) {
       $settings = variable_get('ting_url_labels', _ting_default_url_labels());
       $type = drupal_strtolower($entity->getType());
