@@ -152,7 +152,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
             'html' => TRUE,
             'absolute' => $use_absolute,
           ),
-          '#weight' => 10,
+          '#weight' => 107,
         ),
       );
     }
