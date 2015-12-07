@@ -111,7 +111,10 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       }
     }
 
-    if (!$markup_url && 'UC Viden' === $entity->getAcSource() && $relation) {
+    $knowledge_source = $entity->getAcSource() === 'UC Viden' ;
+    // Get link of the entity with type film that has online access.
+    $film_online_access = $entity->getType() === 'Film (net)' && $relation->type === 'dbcaddi:hasOnlineAccess';
+    if (!$markup_url && $relation && ($knowledge_source || $film_online_access)) {
       $markup_url = htmlspecialchars_decode($relation->uri);
       $use_absolute = TRUE;
     }
@@ -152,7 +155,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
             'html' => TRUE,
             'absolute' => $use_absolute,
           ),
-          '#weight' => 10,
+          '#weight' => 107,
         ),
       );
     }
