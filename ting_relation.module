@@ -139,7 +139,7 @@ function ting_relation_ding_entity_buttons($type, $entity) {
       }
       $use_absolute = TRUE;
     }
-    elseif(!$markup_url && !$entity_url && $relation->uri) {
+    elseif(!$markup_url && !$entity_url && $relation && $relation->uri) {
       $markup_url = $relation->uri;
     }
 
