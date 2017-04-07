@@ -170,7 +170,7 @@ function ting_relation_subjects($relations) {
 }
 
 /**
- * two variants sofar - review(ac:source=Anmeldelser) and all the others (sofar only ac:source=bibliotekets materialer)
+ * Two variants so far - review(ac:source=Anmeldelser) and all the others (sofar only ac:source=bibliotekets materialer).
  */
 function ting_relation_reviews($relations) {
   $ret = NULL;
@@ -201,8 +201,7 @@ function ting_relation_review_other($relation) {
   // Title.
   global $base_url;
 
-  // Convert title to an object link,
-  //   and check if we should link to fultext.
+  // Convert title to an object link, and check if we should link to fulltext.
   if (in_array('docbook', $ting->getFormatsAvailable()) && !$ting->getIndentifier()) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
@@ -257,10 +256,8 @@ function ting_relation_review($relation) {
   // Title ; generel.
   global $base_url;
 
-  // Convert title to an object link,
-  //   and check if we should link to fultext.
-  $has_identifier = !$ting->getIssn() || !$ting->getIsbn();
-  if (in_array('docbook', $ting->getFormatsAvailable()) && !$has_identifier) {
+  // Convert title to an object link, and check if we should link to fultext.
+  if (in_array('docbook', $ting->getFormatsAvailable())) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/' . $ting->ding_entity_id . '/fulltext');
   }
   elseif (strstr($url, '[useraccessinfomedia]')) {
@@ -290,7 +287,7 @@ function ting_relation_review($relation) {
           $url,
           $url,
           array('attributes' => array('target' => '_blank'))
-        )
+        ),
       );
     }
     else {
@@ -299,7 +296,7 @@ function ting_relation_review($relation) {
           t('Go to Infomedia'),
           $base_url . '/ting/infomedia/' . $ting->getLocalId(),
           array('attributes' => array('target' => '_blank'))
-        )
+        ),
       );
     }
   }
