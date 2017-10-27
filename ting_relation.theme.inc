@@ -294,8 +294,8 @@ function ting_relation_review($relation) {
       $content['online_url'] = array(
         '#markup' => l(
           t('Go to Infomedia'),
-          $base_url . '/ting/infomedia/' . $ting->getLocalId(),
-          array('attributes' => array('target' => '_blank'))
+          $base_url . '/ting/infomedia/nojs/' . $ting->getLocalId(),
+          array('attributes' => array('target' => '_blank', 'class' => array('use-ajax')))
         ),
       );
     }
