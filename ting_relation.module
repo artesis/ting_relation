@@ -66,7 +66,7 @@ function ting_relation_form_ting_admin_ting_settings_alter(&$form, &$form_state)
   $form['ting']['ting_ebrary_url'] = array(
     '#type' => 'textfield',
     '#title' => t(' URL to ebrary '),
-    '#description' => t('BASE URL to site.ebrary.com e.g.http://site.ebrary.com/lib/librarytitles/docDetail.action?docID='),
+    '#description' => t('BASE URL to site.ebrary.com e.g.https://site.ebrary.com/lib/librarytitles/docDetail.action?docID='),
     '#required' => FALSE,
     '#default_value' => variable_get('ting_ebrary_url', ''),
   );

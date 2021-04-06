@@ -263,7 +263,7 @@ function ting_relation_review($relation) {
   elseif (strstr($url, '[useraccessinfomedia]')) {
     $content['title'] = l($ting->getTitle(), $base_url . '/ting/infomedia/' . $ting->getLocalId());
   }
-  elseif (strstr($url, 'http://')) {
+  elseif (strstr($url, 'http://') || strstr($url, 'https://')) {
     $content['title'] = l($ting->getTitle(), $url);
   }
   else {
