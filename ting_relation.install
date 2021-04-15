@@ -23,3 +23,15 @@ function ting_relation_ding_entity_fields() {
     ),
   );
 }
+
+/**
+ * Update ebrary url schema.
+ */
+function ting_relation_update_7000(&$sandbox) {
+  $ebrary_url = variable_get('ting_ebrary_url');
+
+  if (!empty($ebrary_url)) {
+    $replacement = preg_replace('/\bhttp\b/', 'https', $ebrary_url);
+    variable_set('ting_ebrary_url', $replacement);
+  }
+}
